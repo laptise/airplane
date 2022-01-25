@@ -1,12 +1,13 @@
 import 'package:airplane/firebase_options.dart';
+import 'package:airplane/login.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'chat.dart';
 import 'find.dart';
 import 'friends.dart';
-import 'setting.dart';
 
-void  main () async{
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -17,7 +18,8 @@ void  main () async{
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
+  User? getCurrentUser() => FirebaseAuth.instance.currentUser;
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -34,7 +36,9 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.amber,
       ),
-      home: const Home(title: 'Fdr Demo Home Page'),
+      home: getCurrentUser() != null
+          ? const Home(title: 'Fdr Demo Home Page')
+          : LoginPage(),
     );
   }
 }
