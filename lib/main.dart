@@ -1,5 +1,6 @@
 import 'package:airplane/firebase_options.dart';
 import 'package:airplane/login.dart';
+import 'package:airplane/setting.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -22,24 +23,34 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    FirebaseAuth.instance.authStateChanges();
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.amber,
-      ),
-      home: getCurrentUser() != null
-          ? const Home(title: 'Fdr Demo Home Page')
-          : const LoginPage(),
-    );
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          // This is the theme of your application.
+          //
+          // Try running your application with "flutter run". You'll see the
+          // application has a blue toolbar. Then, without quitting the app, try
+          // changing the primarySwatch below to Colors.green and then invoke
+          // "hot reload" (press "r" in the console where you ran "flutter run",
+          // or simply save your changes to "hot reload" in a Flutter IDE).
+          // Notice that the counter didn't reset back to zero; the application
+          // is not restarted.
+          primarySwatch: Colors.amber,
+        ),
+        home: StreamBuilder<User?>(
+            stream: FirebaseAuth.instance.authStateChanges(),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                // User が null でなない、つまりサインイン済みのホーム画面へ
+                return const Home(title: 'Fdr Demo Home Page');
+              } else {
+                return const LoginPage();
+              }
+            })
+        // User が null である、つまり未サインインのサインイン画面へ
+
+        );
   }
 }
 
@@ -65,6 +76,8 @@ enum MegaMenu { friends, chat, find }
 
 class _HomeState extends State<Home> {
   MegaMenu _currentMegaMenu = MegaMenu.chat;
+
+  final GlobalKey<ScaffoldState> _scaffold = GlobalKey<ScaffoldState>();
 
   void _setCurrentMega(int index) {
     setState(() {
@@ -94,13 +107,25 @@ class _HomeState extends State<Home> {
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
     return Scaffold(
+      key: _scaffold,
       appBar: AppBar(
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
-        toolbarHeight: 30,
         title: const Text('aasse'),
         elevation: 0,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.settings),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => SetTop()),
+              );
+            },
+          ),
+        ],
       ),
+      endDrawer: Drawer(),
       body: getTop(),
       bottomNavigationBar: BottomNavigationBar(
           selectedItemColor: Colors.red,
