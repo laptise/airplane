@@ -1,12 +1,16 @@
+import 'package:airplane/firebase_options.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'chat.dart';
 import 'find.dart';
 import 'friends.dart';
 import 'setting.dart';
 
-void main() {
-  //WidgetsFlutterBinding.ensureInitialized();
-  //await Firebase.initializeApp();
+void  main () async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 
@@ -53,7 +57,7 @@ class Home extends StatefulWidget {
   State<Home> createState() => _HomeState();
 }
 
-enum MegaMenu { friends, chat, find, setting }
+enum MegaMenu { friends, chat, find }
 
 class _HomeState extends State<Home> {
   MegaMenu _currentMegaMenu = MegaMenu.chat;
@@ -72,8 +76,6 @@ class _HomeState extends State<Home> {
         return ChatTop();
       case MegaMenu.find:
         return FindTop();
-      case MegaMenu.setting:
-        return SetTop();
       default:
         throw Error();
     }
