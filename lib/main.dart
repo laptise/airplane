@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget {
       ),
       home: getCurrentUser() != null
           ? const Home(title: 'Fdr Demo Home Page')
-          : LoginPage(),
+          : const LoginPage(),
     );
   }
 }
