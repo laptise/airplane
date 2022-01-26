@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:airplane/firebase_options.dart';
 import 'package:airplane/login.dart';
 import 'package:airplane/setting.dart';
@@ -98,6 +100,19 @@ class _HomeState extends State<Home> {
     }
   }
 
+  String getPageName() {
+    switch (_currentMegaMenu) {
+      case MegaMenu.friends:
+        return "友達";
+      case MegaMenu.chat:
+        return "チャット";
+      case MegaMenu.find:
+        return "みつける";
+      default:
+        throw Error();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
@@ -109,9 +124,19 @@ class _HomeState extends State<Home> {
     return Scaffold(
       key: _scaffold,
       appBar: AppBar(
+        centerTitle: false,
+        leadingWidth: 9,
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
-        title: const Text('aasse'),
+        title: SizedBox(
+          child: Text(
+            getPageName(),
+            textWidthBasis: TextWidthBasis.longestLine,
+            textAlign: TextAlign.left,
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+        ),
+        toolbarHeight: 40,
         elevation: 0,
         actions: [
           IconButton(

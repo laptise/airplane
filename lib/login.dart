@@ -1,3 +1,4 @@
+import 'package:airplane/components/alert.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -40,27 +41,11 @@ class _LoginPageState extends State<LoginPage> {
     try {
       await auth.signInWithEmailAndPassword(email: _email, password: _password);
     } catch (e) {
+      SimpleAlert.showMessage((context), "ログインに失敗しました。");
       print(e);
     }
   }
 
-  void show() {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return SimpleDialog(
-          title: Text("会員登録が完了しました。"),
-          children: <Widget>[
-            // コンテンツ領域
-            SimpleDialogOption(
-              onPressed: () => Navigator.pop(context),
-              child: Text("１項目目"),
-            ),
-          ],
-        );
-      },
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -141,6 +126,7 @@ class _SigninPageState extends State<SigninPage> {
           email: _email, password: _password);
       show();
     } catch (e) {
+
       print(e);
     }
     print(_email);
