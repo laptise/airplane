@@ -1,11 +1,10 @@
-import 'dart:ui';
-
 import 'package:airplane/firebase_options.dart';
 import 'package:airplane/login.dart';
 import 'package:airplane/setting.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'chat.dart';
 import 'find.dart';
 import 'friends.dart';
@@ -15,7 +14,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const MyApp());
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -47,13 +46,36 @@ class MyApp extends StatelessWidget {
                 // User が null でなない、つまりサインイン済みのホーム画面へ
                 return const Home(title: 'Fdr Demo Home Page');
               } else {
-                return const LoginPage();
+                return LoginPage();
               }
             })
         // User が null である、つまり未サインインのサインイン画面へ
 
         );
   }
+}
+
+class LoginUserInfo {
+  String userName;
+  LoginUserInfo(this.userName);
+}
+
+final userInfoProvider = StateNotifierProvider((ref) {
+  return UserInfoSetter();
+});
+
+class UserInfoSetter extends StateNotifier<LoginUserInfo> {
+  UserInfoSetter() : super(LoginUserInfo(""));
+  void setInfo(LoginUserInfo info) => state = info;
+}
+
+final counterProvider = StateNotifierProvider((ref) {
+  return Counter();
+});
+
+class Counter extends StateNotifier<int> {
+  Counter() : super(0);
+  void increment() => state++;
 }
 
 class Home extends StatefulWidget {
@@ -90,7 +112,7 @@ class _HomeState extends State<Home> {
   Widget getTop() {
     switch (_currentMegaMenu) {
       case MegaMenu.friends:
-        return FriendsTop();
+        return const FriendsTop();
       case MegaMenu.chat:
         return ChatTop();
       case MegaMenu.find:
