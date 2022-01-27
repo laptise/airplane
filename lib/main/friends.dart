@@ -10,7 +10,20 @@ class FriendsTop extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: Column(children: const [ProfileBadge()]));
+    return Scaffold(
+        body: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      const ProfileBadge(),
+      Container(
+        width: double.infinity,
+        decoration: const BoxDecoration(color: Color.fromRGBO(0, 0, 0, 0.05)),
+        child: const Padding(
+            padding: EdgeInsets.symmetric(vertical: 2.5, horizontal: 5),
+            child: Text("友達リスト",
+                style: TextStyle(
+                  fontSize: 12,
+                ))),
+      )
+    ]));
   }
 }
 
@@ -43,14 +56,26 @@ class ProfileBadge extends HookConsumerWidget {
                             style:
                                 TextStyle(fontSize: 12, color: Colors.black)),
                         onPressed: () {}))),
-            Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Text(userName.userName ?? ""),
-              Text(FirebaseAuth.instance.currentUser?.email ?? "")
-            ])
+            Row(
+              children: [
+                Container(
+                  width: 40,
+                  height: 40,
+                  decoration: const BoxDecoration(
+                      color: Colors.black12, shape: BoxShape.circle),
+                ),
+                const Padding(padding: EdgeInsets.symmetric(horizontal: 5)),
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                  Text(
+                    userName.userName ?? "",
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold, fontSize: 14),
+                  ),
+                  Text(FirebaseAuth.instance.currentUser?.email ?? "")
+                ])
+              ],
+            )
           ],
         ));
   }
 }
-
-
-// 
