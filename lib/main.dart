@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'chat.dart';
 import 'find.dart';
-import 'main/friends.dart';
+import 'main/top.dart';
 
 class AuthInfo {
   String? userName;
