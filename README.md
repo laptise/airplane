@@ -1,16 +1,16 @@
 # airplane
 
-A new Flutter project.
+サブスクリプション型チャットアプリ
 
-## Getting Started
+### 概要
 
-This project is a starting point for a Flutter application.
+インフルエンサーやアーティストなどと 1:1 チャットできるサービスをサブスクリプション型商品として提供する
 
-A few resources to get you started if this is your first Flutter project:
+### 特徴
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+あくまでも配信者がサービス提供者となるため、複数の登録者への返信または発信がしやすい環境を用意する必要がある
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### 利用例
+
+- ファンとアーティストの間での利用
+- 有料情報を登録者にリアルタイムで届ける
