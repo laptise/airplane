@@ -27,12 +27,30 @@ class ProfileBadge extends HookConsumerWidget {
                 bottom: BorderSide(
                     width: 0.1, color: Color.fromRGBO(0, 0, 0, 0.8)))),
         padding: const EdgeInsets.all(8.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: Stack(
           children: [
-            Text(userName.userName ?? ""),
-            Text(FirebaseAuth.instance.currentUser?.email ?? "")
+            Align(
+                alignment: Alignment.topRight,
+                child: SizedBox(
+                    height: 30,
+                    width: 60,
+                    child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            elevation: 0.5,
+                            primary: const Color.fromRGBO(255, 255, 255, 0.8),
+                            side: const BorderSide(color: Colors.black26)),
+                        child: const Text("編集",
+                            style:
+                                TextStyle(fontSize: 12, color: Colors.black)),
+                        onPressed: () {}))),
+            Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Text(userName.userName ?? ""),
+              Text(FirebaseAuth.instance.currentUser?.email ?? "")
+            ])
           ],
         ));
   }
 }
+
+
+// 
