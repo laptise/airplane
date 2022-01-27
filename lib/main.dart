@@ -9,6 +9,21 @@ import 'chat.dart';
 import 'find.dart';
 import 'friends.dart';
 
+class AuthInfo {
+  String? userName;
+  AuthInfo();
+  AuthInfo.name(this.userName);
+}
+
+final userInfoProvider = StateNotifierProvider((ref) {
+  return UserInfoSetter();
+});
+
+class UserInfoSetter extends StateNotifier<AuthInfo> {
+  UserInfoSetter() : super(AuthInfo());
+  void setInfo(AuthInfo info) => state = info;
+}
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
@@ -17,14 +32,15 @@ void main() async {
   runApp(const ProviderScope(child: MyApp()));
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends HookConsumerWidget {
   const MyApp({Key? key}) : super(key: key);
 
   User? getCurrentUser() => FirebaseAuth.instance.currentUser;
 
   @override
-  Widget build(BuildContext context) {
-    FirebaseAuth.instance.authStateChanges();
+  Widget build(BuildContext context, WidgetRef ref) {
+    final AuthInfo user = ref.watch(userInfoProvider) as AuthInfo;
+    print(user);
     return MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(
@@ -42,7 +58,7 @@ class MyApp extends StatelessWidget {
         home: StreamBuilder<User?>(
             stream: FirebaseAuth.instance.authStateChanges(),
             builder: (context, snapshot) {
-              if (snapshot.hasData) {
+              if (user.userName != null) {
                 // User が null でなない、つまりサインイン済みのホーム画面へ
                 return const Home(title: 'Fdr Demo Home Page');
               } else {
@@ -53,20 +69,6 @@ class MyApp extends StatelessWidget {
 
         );
   }
-}
-
-class LoginUserInfo {
-  String userName;
-  LoginUserInfo(this.userName);
-}
-
-final userInfoProvider = StateNotifierProvider((ref) {
-  return UserInfoSetter();
-});
-
-class UserInfoSetter extends StateNotifier<LoginUserInfo> {
-  UserInfoSetter() : super(LoginUserInfo(""));
-  void setInfo(LoginUserInfo info) => state = info;
 }
 
 final counterProvider = StateNotifierProvider((ref) {

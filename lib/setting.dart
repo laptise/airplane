@@ -1,7 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class SetTop extends StatelessWidget {
+import 'main.dart';
+
+class SetTop extends HookConsumerWidget {
   const SetTop({Key? key}) : super(key: key);
 
   Future<void> logout() async {
@@ -9,7 +12,7 @@ class SetTop extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('設定'),
@@ -19,7 +22,7 @@ class SetTop extends StatelessWidget {
           children: [
             ListTile(
               onTap: () async {
-                await logout();
+                ref.read(userInfoProvider.notifier).setInfo(AuthInfo());
                 if (Navigator.canPop(context)) {
                   Navigator.pop(context);
                 }

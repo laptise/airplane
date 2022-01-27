@@ -1,7 +1,9 @@
 import 'package:airplane/components/firebase.dart';
+import 'package:airplane/main.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class FriendsTop extends StatelessWidget {
   const FriendsTop({Key? key}) : super(key: key);
@@ -12,19 +14,12 @@ class FriendsTop extends StatelessWidget {
   }
 }
 
-class ProfileBadge extends StatelessWidget {
+class ProfileBadge extends HookConsumerWidget {
   const ProfileBadge({Key? key}) : super(key: key);
 
-  Future<void> getName() async {
-    final users = FbUtil.fireStore.collection("user");
-    final doc = await users.doc(FbUtil.currentUser.uid).get();
-    print(doc);
-    return;
-  }
-
   @override
-  Widget build(BuildContext context) {
-    getName();
+  Widget build(BuildContext context, WidgetRef ref) {
+    AuthInfo userName = ref.watch(userInfoProvider) as AuthInfo;
     return Container(
         width: double.infinity,
         decoration: const BoxDecoration(
@@ -32,6 +27,12 @@ class ProfileBadge extends StatelessWidget {
                 bottom: BorderSide(
                     width: 0.1, color: Color.fromRGBO(0, 0, 0, 0.8)))),
         padding: const EdgeInsets.all(8.0),
-        child: Text(FirebaseAuth.instance.currentUser?.email ?? ""));
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(userName.userName ?? ""),
+            Text(FirebaseAuth.instance.currentUser?.email ?? "")
+          ],
+        ));
   }
 }
