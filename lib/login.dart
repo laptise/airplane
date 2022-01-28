@@ -154,7 +154,9 @@ class _SigninPageState extends State<SigninPage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       TextFormField(
-                        decoration: const InputDecoration(labelText: "メールアドレス"),
+                        keyboardType: TextInputType.emailAddress,
+                        decoration: const InputDecoration(
+                            labelText: "メールアドレス", hintText: "email"),
                         initialValue: _email,
                         onChanged: updateEmail,
                       ),
