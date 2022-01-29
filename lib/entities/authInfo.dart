@@ -6,8 +6,8 @@ import 'instance.dart';
 
 class AuthInfo {
   String name;
-  late String id;
-  AuthInfo.name(this.name);
+  String id;
+  AuthInfo(this.id, this.name);
 
   static CollectionReference<AuthInfo> get colRef =>
       FbUtil.fireStore.collection("users").withConverter(
@@ -20,9 +20,10 @@ class AuthInfo {
   )   : id = snapshot.id,
         name = snapshot.data()!["name"];
 
-  static Map<String, Object?> toFirestore(Object? value, SetOptions? options) {
+  static Map<String, Object?> toFirestore(
+      AuthInfo? value, SetOptions? options) {
     if (value == null) throw Error();
-    return jsonDecode(jsonEncode(value));
+    return {"name": value.name};
   }
 
   static Future<AuthInfo> getFromUid(String uid) async {
@@ -30,5 +31,9 @@ class AuthInfo {
     final userInfo = snapshot.data();
     if (userInfo == null) throw Error();
     return userInfo;
+  }
+
+  static Future<void> insertNewUser(AuthInfo ref) async {
+    await AuthInfo.colRef.doc(ref.id).set(ref);
   }
 }
