@@ -6,7 +6,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'chat.dart';
-import 'find.dart';
+import 'find/top.dart';
 import 'main/top.dart';
 
 class AuthInfo {
@@ -40,7 +40,6 @@ class MyApp extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final AuthInfo user = ref.watch(userInfoProvider) as AuthInfo;
-    print(user);
     return MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(
@@ -116,9 +115,9 @@ class _HomeState extends State<Home> {
       case MegaMenu.friends:
         return const FriendsTop();
       case MegaMenu.chat:
-        return ChatTop();
+        return const ChatTop();
       case MegaMenu.find:
-        return FindTop();
+        return const FindTop();
       default:
         throw Error();
     }
@@ -157,7 +156,7 @@ class _HomeState extends State<Home> {
             getPageName(),
             textWidthBasis: TextWidthBasis.longestLine,
             textAlign: TextAlign.left,
-            style: TextStyle(fontWeight: FontWeight.bold),
+            style: const TextStyle(fontWeight: FontWeight.bold),
           ),
         ),
         toolbarHeight: 40,
@@ -168,13 +167,12 @@ class _HomeState extends State<Home> {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => SetTop()),
+                MaterialPageRoute(builder: (context) => const SetTop()),
               );
             },
           ),
         ],
       ),
-      endDrawer: Drawer(),
       body: getTop(),
       bottomNavigationBar: BottomNavigationBar(
           selectedItemColor: Colors.red,
