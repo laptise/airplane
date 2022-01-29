@@ -9,12 +9,14 @@ class PremiumUser {
   String name;
   String lcName;
   String id;
+  String note;
 
   PremiumUser.fromFirestore(
     DocumentSnapshot<Map<String, dynamic>> snapshot,
     SnapshotOptions? options,
   )   : id = snapshot.id,
         name = snapshot.data()!["name"],
+        note = snapshot.data()!["note"] ?? "",
         lcName = snapshot.data()!["lcName"];
 
   static Map<String, Object?> toFirestore(Object? value, SetOptions? options) {

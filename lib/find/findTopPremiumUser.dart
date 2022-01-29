@@ -86,12 +86,22 @@ class PremiumUserBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        padding: const EdgeInsets.all(15),
-        width: double.infinity,
-        decoration: BoxDecoration(
-            border: Border.all(
-                width: 1, color: Colors.black, style: BorderStyle.solid)),
-        child: Text(sender.name));
+    return ListTile(
+      title: Text(sender.name),
+      subtitle: Text(sender.note),
+      leading: Container(
+        width: 40,
+        height: 40,
+        decoration:
+            const BoxDecoration(color: Colors.black12, shape: BoxShape.circle),
+      ),
+      onTap: () {
+        showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(content: Text(sender.name));
+            });
+      },
+    );
   }
 }

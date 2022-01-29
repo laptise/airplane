@@ -6,14 +6,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 class FbUtil {
   static FirebaseAuth get auth => FirebaseAuth.instance;
   static FirebaseFirestore get fireStore => FirebaseFirestore.instance;
-  static User get currentUser {
-    final user = FbUtil.auth.currentUser;
-    if (user != null) {
-      return user;
-    } else {
-      throw Error();
-    }
-  }
 }
 
 class EntityTemplate {
@@ -34,13 +26,5 @@ class EntityTemplate {
   static Map<String, Object?> toFirestore(Object? value, SetOptions? options) {
     if (value == null) throw Error();
     return jsonDecode(jsonEncode(value));
-  }
-
-  static Future<List<EntityTemplate>> searchByName(String nameKeyword) async {
-    final res = await EntityTemplate.colRef
-        .orderBy("lcName")
-        .startAt([nameKeyword]).endAt([nameKeyword + '\uf8ff']).get();
-    final docs = res.docs.map((x) => x.data()).toList();
-    return docs;
   }
 }
