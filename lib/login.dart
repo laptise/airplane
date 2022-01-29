@@ -1,9 +1,11 @@
 import 'package:airplane/components/alert.dart';
-import 'package:airplane/components/firebase.dart';
 import 'package:airplane/main.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+
+import 'entities/authInfo.dart';
+import 'entities/instance.dart';
 
 class SigninPage extends StatefulWidget {
   const SigninPage({Key? key}) : super(key: key);
@@ -24,16 +26,10 @@ class LoginPage extends HookConsumerWidget {
     try {
       final userRef = await auth.signInWithEmailAndPassword(
           email: email, password: password);
-      final userInfo = await FbUtil.fireStore
-          .collection("users")
-          .doc(userRef.user!.uid)
-          .get();
-      ref
-          .read(userInfoProvider.notifier)
-          .setInfo(AuthInfo.name(userInfo["name"]));
+      final userInfo = await AuthInfo.getFromUid(userRef.user!.uid);
+      ref.read(userInfoProvider.notifier).setInfo(userInfo);
     } catch (e) {
       SimpleAlert.showMessage((context), "ログインに失敗しました。");
-      print(e);
     }
   }
 

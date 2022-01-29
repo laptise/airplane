@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import 'entities/authInfo.dart';
 import 'main.dart';
 
 class SetTop extends HookConsumerWidget {
@@ -22,7 +23,7 @@ class SetTop extends HookConsumerWidget {
           children: [
             ListTile(
               onTap: () async {
-                ref.read(userInfoProvider.notifier).setInfo(AuthInfo());
+                ref.read(userInfoProvider.notifier).setInfo(null);
                 if (Navigator.canPop(context)) {
                   Navigator.pop(context);
                 }

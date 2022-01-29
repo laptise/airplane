@@ -1,3 +1,4 @@
+import 'package:airplane/entities/authInfo.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -43,7 +44,7 @@ class ProfileBadge extends HookConsumerWidget {
                 const Padding(padding: EdgeInsets.symmetric(horizontal: 5)),
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                   Text(
-                    userName.userName ?? "",
+                    userName.name,
                     style: const TextStyle(
                         fontWeight: FontWeight.bold, fontSize: 14),
                   ),

@@ -6,22 +6,17 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'chat.dart';
+import 'entities/authInfo.dart';
 import 'find/top.dart';
 import 'main/top.dart';
-
-class AuthInfo {
-  String? userName;
-  AuthInfo();
-  AuthInfo.name(this.userName);
-}
 
 final userInfoProvider = StateNotifierProvider((ref) {
   return UserInfoSetter();
 });
 
-class UserInfoSetter extends StateNotifier<AuthInfo> {
-  UserInfoSetter() : super(AuthInfo());
-  void setInfo(AuthInfo info) => state = info;
+class UserInfoSetter extends StateNotifier<AuthInfo?> {
+  UserInfoSetter() : super(null);
+  void setInfo(AuthInfo? info) => state = info;
 }
 
 void main() async {
@@ -39,7 +34,7 @@ class MyApp extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final AuthInfo user = ref.watch(userInfoProvider) as AuthInfo;
+    final AuthInfo? user = ref.watch(userInfoProvider) as AuthInfo?;
     return MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(
@@ -57,7 +52,7 @@ class MyApp extends HookConsumerWidget {
         home: StreamBuilder<User?>(
             stream: FirebaseAuth.instance.authStateChanges(),
             builder: (context, snapshot) {
-              if (user.userName != null) {
+              if (user != null) {
                 // User が null でなない、つまりサインイン済みのホーム画面へ
                 return const Home(title: 'Fdr Demo Home Page');
               } else {
