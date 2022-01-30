@@ -1,4 +1,4 @@
-import 'package:airplane/find/findTopPremiumUser.dart';
+import 'package:airplane/find/find_top_premium_user.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 

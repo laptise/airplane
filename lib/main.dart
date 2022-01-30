@@ -1,5 +1,6 @@
 import 'package:airplane/firebase_options.dart';
 import 'package:airplane/login/login.dart';
+import 'package:airplane/premiums/manage_menu.dart';
 import 'package:airplane/setting.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -54,7 +55,7 @@ class MyApp extends HookConsumerWidget {
             builder: (context, snapshot) {
               if (user != null) {
                 // User が null でなない、つまりサインイン済みのホーム画面へ
-                return const Home(title: 'Fdr Demo Home Page');
+                return Home(user: user);
               } else {
                 return LoginPage();
               }
@@ -75,7 +76,8 @@ class Counter extends StateNotifier<int> {
 }
 
 class Home extends StatefulWidget {
-  const Home({Key? key, required this.title}) : super(key: key);
+  final AuthInfo user;
+  const Home({Key? key, required this.user}) : super(key: key);
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -85,8 +87,6 @@ class Home extends StatefulWidget {
   // case the title) provided by the parent (in this case the App widget) and
   // used by the build method of the State. Fields in a Widget subclass are
   // always marked "final".
-
-  final String title;
 
   @override
   State<Home> createState() => _HomeState();
@@ -112,7 +112,7 @@ class _HomeState extends State<Home> {
       case MegaMenu.chat:
         return const ChatTop();
       case MegaMenu.find:
-        return const FindTop();
+        return widget.user.isPremium ? ManageTop() : const FindTop();
       default:
         throw Error();
     }
@@ -125,7 +125,7 @@ class _HomeState extends State<Home> {
       case MegaMenu.chat:
         return "チャット";
       case MegaMenu.find:
-        return "みつける";
+        return widget.user.isPremium ? "管理メニュー" : "みつける";
       default:
         throw Error();
     }
@@ -174,10 +174,17 @@ class _HomeState extends State<Home> {
           unselectedItemColor: Colors.blue,
           currentIndex: _currentMegaMenu.index,
           onTap: (e) => _setCurrentMega(e),
-          items: const [
-            BottomNavigationBarItem(label: "友達", icon: Icon(Icons.people)),
-            BottomNavigationBarItem(label: "チャット", icon: Icon(Icons.message)),
-            BottomNavigationBarItem(label: "見つける", icon: Icon(Icons.search))
+          items: [
+            BottomNavigationBarItem(
+                label: widget.user.isPremium ? "登録者" : "友達",
+                icon: const Icon(Icons.people)),
+            const BottomNavigationBarItem(
+                label: "チャット", icon: Icon(Icons.message)),
+            widget.user.isPremium
+                ? const BottomNavigationBarItem(
+                    label: "管理", icon: Icon(Icons.manage_accounts))
+                : const BottomNavigationBarItem(
+                    label: "見つける", icon: Icon(Icons.search))
           ]),
     );
   }
