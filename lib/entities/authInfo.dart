@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:airplane/entities/premiumUser.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'instance.dart';
@@ -8,7 +9,7 @@ class AuthInfo {
   String name;
   String id;
   AuthInfo(this.id, this.name);
-  bool isPremium = false;
+  PremiumUser? premiumUserInfo;
 
   static CollectionReference<AuthInfo> get colRef =>
       FbUtil.fireStore.collection("users").withConverter(
@@ -43,7 +44,7 @@ class AuthInfo {
     final snapshot = await AuthInfo.premiumsRef.doc(uid).get();
     final userInfo = snapshot.data();
     if (userInfo == null) throw Error();
-    userInfo.isPremium = true;
+    userInfo.premiumUserInfo = await PremiumUser.getFromUid(uid);
     return userInfo;
   }
 

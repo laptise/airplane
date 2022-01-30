@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import 'instance.dart';
+import 'plan.dart';
 
 class PremiumUser {
   String name;
@@ -36,5 +37,16 @@ class PremiumUser {
         .startAt([nameKeyword]).endAt([nameKeyword + '\uf8ff']).get();
     final docs = res.docs.map((x) => x.data()).toList();
     return docs;
+  }
+
+  static Future<PremiumUser> getFromUid(String uid) async {
+    final snapshot = await PremiumUser.colRef.doc(uid).get();
+    final data = snapshot.data();
+    if (data == null) throw Error();
+    return data;
+  }
+
+  Future<List<Plan>> getAllPlans() async {
+    return await Plan.getFromOwnerUid(id);
   }
 }

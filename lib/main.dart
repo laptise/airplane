@@ -112,7 +112,9 @@ class _HomeState extends State<Home> {
       case MegaMenu.chat:
         return const ChatTop();
       case MegaMenu.find:
-        return widget.user.isPremium ? ManageTop() : const FindTop();
+        return widget.user.premiumUserInfo != null
+            ? ManageTop()
+            : const FindTop();
       default:
         throw Error();
     }
@@ -125,7 +127,7 @@ class _HomeState extends State<Home> {
       case MegaMenu.chat:
         return "チャット";
       case MegaMenu.find:
-        return widget.user.isPremium ? "管理メニュー" : "みつける";
+        return widget.user.premiumUserInfo != null ? "管理メニュー" : "みつける";
       default:
         throw Error();
     }
@@ -176,11 +178,11 @@ class _HomeState extends State<Home> {
           onTap: (e) => _setCurrentMega(e),
           items: [
             BottomNavigationBarItem(
-                label: widget.user.isPremium ? "登録者" : "友達",
+                label: widget.user.premiumUserInfo != null ? "登録者" : "友達",
                 icon: const Icon(Icons.people)),
             const BottomNavigationBarItem(
                 label: "チャット", icon: Icon(Icons.message)),
-            widget.user.isPremium
+            widget.user.premiumUserInfo != null
                 ? const BottomNavigationBarItem(
                     label: "管理", icon: Icon(Icons.manage_accounts))
                 : const BottomNavigationBarItem(
