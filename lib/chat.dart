@@ -5,6 +5,6 @@ class ChatTop extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: Center(child: Text("チャットする")));
+    return const Scaffold(body: Center(child: Text("チャットする")));
   }
 }

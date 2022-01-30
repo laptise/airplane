@@ -20,7 +20,10 @@ class LoginPage extends HookConsumerWidget {
     try {
       final userRef = await auth.signInWithEmailAndPassword(
           email: email, password: password);
-      final userInfo = await AuthInfo.getFromUid(userRef.user!.uid);
+      final uid = userRef.user!.uid;
+      final userInfo = await AuthInfo.getFromUid(uid).catchError((err) async {
+        return await AuthInfo.getFromPremiumUsers(uid);
+      });
       ref.read(userInfoProvider.notifier).setInfo(userInfo);
     } catch (e) {
       SimpleAlert.showMessage((context), "ログインに失敗しました。");

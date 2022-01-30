@@ -8,9 +8,15 @@ class AuthInfo {
   String name;
   String id;
   AuthInfo(this.id, this.name);
+  bool isPremium = false;
 
   static CollectionReference<AuthInfo> get colRef =>
       FbUtil.fireStore.collection("users").withConverter(
+          fromFirestore: AuthInfo.fromFirestore,
+          toFirestore: AuthInfo.toFirestore);
+
+  static CollectionReference<AuthInfo> get premiumsRef =>
+      FbUtil.fireStore.collection("premiumUsers").withConverter(
           fromFirestore: AuthInfo.fromFirestore,
           toFirestore: AuthInfo.toFirestore);
 
@@ -30,6 +36,14 @@ class AuthInfo {
     final snapshot = await AuthInfo.colRef.doc(uid).get();
     final userInfo = snapshot.data();
     if (userInfo == null) throw Error();
+    return userInfo;
+  }
+
+  static Future<AuthInfo> getFromPremiumUsers(String uid) async {
+    final snapshot = await AuthInfo.premiumsRef.doc(uid).get();
+    final userInfo = snapshot.data();
+    if (userInfo == null) throw Error();
+    userInfo.isPremium = true;
     return userInfo;
   }
 
