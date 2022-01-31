@@ -1,4 +1,4 @@
-import 'package:airplane/premiums/plans.dart';
+import 'package:airplane/premiums/plans/plans.dart';
 import 'package:airplane/setting.dart';
 import 'package:flutter/material.dart';
 
