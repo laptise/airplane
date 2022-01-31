@@ -29,7 +29,6 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  payjp_flutter: ^0.4.1
 
   # Add the dependency for the FlutterFire plugin for Google Analytics
   firebase_analytics: ^9.0.5
