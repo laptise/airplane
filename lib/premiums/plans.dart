@@ -101,6 +101,8 @@ class _AddNewPlanState extends State<AddNewPlan> {
     final name = nameController.text;
     final detail = planDetailController.text;
     final price = priceController.text;
+    final newEntity = Plan(widget.premInfo.id, name, detail, int.parse(price));
+    await Plan.makeNewPlan(newEntity);
   }
 
   @override
@@ -126,7 +128,9 @@ class _AddNewPlanState extends State<AddNewPlan> {
                 decoration: const InputDecoration(labelText: "料金 : (１月あたり)"),
               ),
               ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  setNewPlan();
+                },
                 child: const Text("プラン登録"),
               )
             ],

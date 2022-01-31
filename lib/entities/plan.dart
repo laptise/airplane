@@ -27,9 +27,13 @@ class Plan {
         price = snapshot.data()!["price"],
         owner = snapshot.data()!["owner"];
 
-  static Map<String, Object?> toFirestore(Object? value, SetOptions? options) {
-    if (value == null) throw Error();
-    return jsonDecode(jsonEncode(value));
+  static Map<String, Object?> toFirestore(Plan value, SetOptions? options) {
+    return {
+      "name": value.name,
+      "note": value.note,
+      "price": value.price,
+      "owner": value.owner
+    };
   }
 
   static Future<List<Plan>> getFromOwnerUid(String uid) async {
