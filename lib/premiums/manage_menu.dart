@@ -1,9 +1,15 @@
+import 'package:airplane/channels/channels.dart';
 import 'package:airplane/premiums/plans/plans.dart';
 import 'package:airplane/setting.dart';
 import 'package:flutter/material.dart';
 
 class ManageTop extends StatelessWidget {
   const ManageTop({Key? key}) : super(key: key);
+  Future<void> _getCamera() async {
+// メソッドの呼び出し
+    var result = await PaymentChannel.payTest();
+    print(result);
+  }
 
   Widget buildBlock(BuildContext context, IconData icon, String label,
       Widget Function(BuildContext) widget) {
@@ -43,6 +49,12 @@ class ManageTop extends StatelessWidget {
           context, Icons.library_add, "道具３", (context) => const SetTop()),
       buildBlock(
           context, Icons.library_add, "道具３", (context) => const SetTop()),
+      TextButton(
+        child: Text("test"),
+        onPressed: () {
+          _getCamera();
+        },
+      )
     ]));
   }
 }
