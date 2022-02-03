@@ -1,6 +1,5 @@
 import UIKit
 import Flutter
-import PAYJP
 
 @UIApplicationMain
 @objc class AppDelegate: FlutterAppDelegate {
@@ -8,8 +7,6 @@ import PAYJP
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
     ) -> Bool {
-        PAYJPSDK.publicKey = "pk_test_0383a1b8f91e8a6e3ea0e2a9"
-        PAYJPSDK.locale = Locale.current
         // ----- 追加するコードは、ここから
         let _controller = window?.rootViewController as! FlutterViewController
         let _channel = FlutterMethodChannel(

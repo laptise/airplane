@@ -5,6 +5,7 @@ import 'package:airplane/setting.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'chat.dart';
 import 'entities/authInfo.dart';
@@ -22,6 +23,8 @@ class UserInfoSetter extends StateNotifier<AuthInfo?> {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  Stripe.publishableKey =
+      "pk_test_51KOaKzE4EGeaPqNZuE4ZkutgBjt51Iv4GSExJmGfEzDO3M7njDWtnIicWwfBjTqeO6UoT8WpjKhRq2PJLeZczarv006mGwNEOE";
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );

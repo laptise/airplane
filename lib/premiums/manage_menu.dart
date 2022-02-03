@@ -2,6 +2,7 @@ import 'package:airplane/channels/channels.dart';
 import 'package:airplane/premiums/plans/plans.dart';
 import 'package:airplane/setting.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 
 class ManageTop extends StatelessWidget {
   const ManageTop({Key? key}) : super(key: key);
@@ -42,19 +43,26 @@ class ManageTop extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Row(children: [
-      buildBlock(context, Icons.manage_accounts, "プラン", (context) => Plans()),
-      buildBlock(context, Icons.headphones, "道具２", (context) => const SetTop()),
-      buildBlock(
-          context, Icons.library_add, "道具３", (context) => const SetTop()),
-      buildBlock(
-          context, Icons.library_add, "道具３", (context) => const SetTop()),
-      TextButton(
-        child: Text("test"),
-        onPressed: () {
-          _getCamera();
-        },
-      )
-    ]));
+        body: Column(
+      children: [
+        Row(children: [
+          buildBlock(
+              context, Icons.manage_accounts, "プラン", (context) => Plans()),
+          buildBlock(
+              context, Icons.headphones, "道具２", (context) => const SetTop()),
+          buildBlock(
+              context, Icons.library_add, "道具３", (context) => const SetTop()),
+          buildBlock(
+              context, Icons.library_add, "道具３", (context) => const SetTop()),
+        ]),
+        Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20),
+            child: CardField(
+              onCardChanged: (card) {
+                print(card);
+              },
+            )),
+      ],
+    ));
   }
 }
