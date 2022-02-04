@@ -12,8 +12,8 @@ class EntityTemplate {
   String id;
   String param;
 
-  static CollectionReference<EntityTemplate> get colRef =>
-      FbUtil.fireStore.collection("premiumUsers").withConverter(
+  static final CollectionReference<EntityTemplate> colRef =
+      FirebaseFirestore.instance.collection("premiumUsers").withConverter(
           fromFirestore: EntityTemplate.fromFirestore,
           toFirestore: EntityTemplate.toFirestore);
 
@@ -24,7 +24,6 @@ class EntityTemplate {
         param = snapshot.data()!["param"];
 
   static Map<String, Object?> toFirestore(Object? value, SetOptions? options) {
-    if (value == null) throw Error();
-    return jsonDecode(jsonEncode(value));
+    throw "実装してください";
   }
 }

@@ -1,6 +1,7 @@
 import 'package:airplane/entities/plan.dart';
 import 'package:airplane/entities/premiumUser.dart';
 import 'package:airplane/find/find_top_premium_user.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class AddNewPlan extends StatefulWidget {
@@ -20,8 +21,9 @@ class _AddNewPlanState extends State<AddNewPlan> {
     final name = nameController.text;
     final detail = planDetailController.text;
     final price = priceController.text;
-    final newEntity = Plan(widget.premInfo.id, name, detail, int.parse(price));
-    await Plan.makeNewPlan(newEntity);
+    final newEntity =
+        Plan.createNew(widget.premInfo.id, name, detail, int.parse(price));
+    await newEntity.upsert();
   }
 
   @override

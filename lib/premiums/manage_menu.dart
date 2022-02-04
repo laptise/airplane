@@ -1,4 +1,5 @@
 import 'package:airplane/channels/channels.dart';
+import 'package:airplane/entities/plan.dart';
 import 'package:airplane/premiums/plans/plans.dart';
 import 'package:airplane/setting.dart';
 import 'package:flutter/material.dart';

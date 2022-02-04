@@ -47,6 +47,6 @@ class PremiumUser {
   }
 
   Future<List<Plan>> getAllPlans() async {
-    return await Plan.getFromOwnerUid(id);
+    return await Plan.getListFromOwnerUid(id);
   }
 }

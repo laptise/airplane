@@ -1,7 +1,10 @@
+import 'dart:math';
+
 import 'package:airplane/entities/authInfo.dart';
 import 'package:airplane/entities/plan.dart';
 import 'package:airplane/entities/premiumUser.dart';
 import 'package:airplane/find/find_top_premium_user.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -35,19 +38,11 @@ class PlanBody extends StatefulWidget {
 
 class _PlanBodyState extends State<PlanBody> {
   bool isSearching = false;
-  List<Plan> plans = [];
-  Future<void> getPlans() async {
-    final res = await widget.premInfo.getAllPlans();
-    setState(() {
-      plans = res;
-    });
-  }
 
   @override
   initState() {
     // 必ず、super.initState()を呼ぶこと
     super.initState();
-    getPlans();
   }
 
   @override
@@ -84,13 +79,38 @@ class _PlanBodyState extends State<PlanBody> {
                 ),
               ],
             ),
-            Text(isSearching ? "GOOD" : "BAD"),
-            Column(
-              children: plans.map((e) => Text(e.name)).toList(),
-            )
+            StreamBuilder(
+                stream: Plan.getListStreamFromOwnerUid(widget.premInfo.id),
+                builder: (BuildContext context,
+                    AsyncSnapshot<QuerySnapshot<Plan>> snapShot) {
+                  return SizedBox(
+                    height: 400.0,
+                    child: ListView(
+                      children: snapShot.hasData
+                          ? snapShot.data!.docs
+                              .map((e) => SinglePlan(e))
+                              .toList()
+                          : [],
+                    ),
+                  );
+                }),
           ],
         )
       ],
+    );
+  }
+}
+
+class SinglePlan extends StatelessWidget {
+  final QueryDocumentSnapshot<Plan> snapshot;
+  const SinglePlan(this.snapshot, {Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final Plan plan = snapshot.data();
+    return ListTile(
+      title: Text(plan.name),
+      trailing: Text(plan.price.toString()),
     );
   }
 }
