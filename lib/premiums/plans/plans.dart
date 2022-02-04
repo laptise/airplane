@@ -110,7 +110,8 @@ class SinglePlan extends StatelessWidget {
     final Plan plan = snapshot.data();
     return ListTile(
       title: Text(plan.name),
-      trailing: Text(plan.price.toString()),
+      trailing: Text(plan.price.toString() + "円"),
+      subtitle: Text(plan.note),
     );
   }
 }
