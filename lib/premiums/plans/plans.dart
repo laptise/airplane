@@ -50,14 +50,6 @@ class _PlanBodyState extends State<PlanBody> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        TextButton(
-          onPressed: () {
-            setState(() {
-              isSearching = !isSearching;
-            });
-          },
-          child: const Text("wo?"),
-        ),
         Column(
           children: [
             Row(
