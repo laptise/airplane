@@ -22,8 +22,8 @@ class _SigninPageState extends State<SigninPage> {
       final credental = await auth.createUserWithEmailAndPassword(
           email: _email, password: _password);
       final uid = credental.user!.uid;
-      final newUser = AuthInfo(uid, _name);
-      await AuthInfo.insertNewUser(newUser);
+      final newUser = UserDoc.createNew(uid, _name, "note");
+      await newUser.upsert();
       show();
     } catch (e) {
       print(e);

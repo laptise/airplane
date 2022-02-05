@@ -2,7 +2,6 @@ import 'dart:math';
 
 import 'package:airplane/entities/authInfo.dart';
 import 'package:airplane/entities/plan.dart';
-import 'package:airplane/entities/premiumUser.dart';
 import 'package:airplane/find/find_top_premium_user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -16,9 +15,8 @@ class Plans extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    AuthInfo user = ref.watch(userInfoProvider) as AuthInfo;
-    final premInfo = user.premiumUserInfo;
-    if (premInfo == null) throw Error();
+    UserDoc user = ref.watch(userInfoProvider) as UserDoc;
+    final premInfo = user;
     return Scaffold(
       appBar: SlimAppBar("プラン管理"),
       body: Align(
@@ -29,7 +27,7 @@ class Plans extends HookConsumerWidget {
 }
 
 class PlanBody extends StatefulWidget {
-  final PremiumUser premInfo;
+  final UserDoc premInfo;
   const PlanBody(this.premInfo, {Key? key}) : super(key: key);
 
   @override

@@ -16,9 +16,9 @@ final userInfoProvider = StateNotifierProvider((ref) {
   return UserInfoSetter();
 });
 
-class UserInfoSetter extends StateNotifier<AuthInfo?> {
+class UserInfoSetter extends StateNotifier<UserDoc?> {
   UserInfoSetter() : super(null);
-  void setInfo(AuthInfo? info) => state = info;
+  void setInfo(UserDoc? info) => state = info;
 }
 
 void main() async {
@@ -38,7 +38,7 @@ class MyApp extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final AuthInfo? user = ref.watch(userInfoProvider) as AuthInfo?;
+    final UserDoc? user = ref.watch(userInfoProvider) as UserDoc?;
     return MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(
@@ -79,7 +79,7 @@ class Counter extends StateNotifier<int> {
 }
 
 class Home extends StatefulWidget {
-  final AuthInfo user;
+  final UserDoc user;
   const Home({Key? key, required this.user}) : super(key: key);
 
   // This widget is the home page of your application. It is stateful, meaning
@@ -115,9 +115,7 @@ class _HomeState extends State<Home> {
       case MegaMenu.chat:
         return const ChatTop();
       case MegaMenu.find:
-        return widget.user.premiumUserInfo != null
-            ? ManageTop()
-            : const FindTop();
+        return widget.user.isPremium ? ManageTop() : const FindTop();
       default:
         throw Error();
     }
@@ -130,7 +128,7 @@ class _HomeState extends State<Home> {
       case MegaMenu.chat:
         return "チャット";
       case MegaMenu.find:
-        return widget.user.premiumUserInfo != null ? "管理メニュー" : "みつける";
+        return widget.user.isPremium ? "管理メニュー" : "みつける";
       default:
         throw Error();
     }
@@ -181,11 +179,11 @@ class _HomeState extends State<Home> {
           onTap: (e) => _setCurrentMega(e),
           items: [
             BottomNavigationBarItem(
-                label: widget.user.premiumUserInfo != null ? "登録者" : "友達",
+                label: widget.user.isPremium ? "登録者" : "友達",
                 icon: const Icon(Icons.people)),
             const BottomNavigationBarItem(
                 label: "チャット", icon: Icon(Icons.message)),
-            widget.user.premiumUserInfo != null
+            widget.user.isPremium
                 ? const BottomNavigationBarItem(
                     label: "管理", icon: Icon(Icons.manage_accounts))
                 : const BottomNavigationBarItem(

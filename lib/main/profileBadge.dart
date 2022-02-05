@@ -9,7 +9,7 @@ class ProfileBadge extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    AuthInfo userName = ref.watch(userInfoProvider) as AuthInfo;
+    UserDoc userName = ref.watch(userInfoProvider) as UserDoc;
     return Container(
         width: double.infinity,
         decoration: const BoxDecoration(

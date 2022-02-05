@@ -1,4 +1,5 @@
-import 'package:airplane/entities/premiumUser.dart';
+import 'package:airplane/components/user_profile.dart';
+import 'package:airplane/entities/authInfo.dart';
 import 'package:flutter/material.dart';
 
 class FindPremUser extends StatefulWidget {
@@ -26,11 +27,11 @@ class SlimAppBar extends AppBar {
 }
 
 class _FindPremUserState extends State<FindPremUser> {
-  List<PremiumUser> items = [];
+  List<UserDoc> items = [];
   final _searchTextController = TextEditingController();
   Future<void> search() async {
     final val = _searchTextController.text.toLowerCase();
-    final res = await PremiumUser.searchByName(val);
+    final res = await UserDoc.searchByName(val);
     setState(() {
       items = res;
     });
@@ -81,7 +82,7 @@ class _FindPremUserState extends State<FindPremUser> {
 }
 
 class PremiumUserBadge extends StatelessWidget {
-  final PremiumUser sender;
+  final UserDoc sender;
   const PremiumUserBadge(this.sender, {Key? key}) : super(key: key);
 
   @override
@@ -96,11 +97,10 @@ class PremiumUserBadge extends StatelessWidget {
             const BoxDecoration(color: Colors.black12, shape: BoxShape.circle),
       ),
       onTap: () {
-        showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return AlertDialog(content: Text(sender.name));
-            });
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => UserProfilePage(sender.id)),
+        );
       },
     );
   }

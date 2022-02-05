@@ -1,11 +1,11 @@
+import 'package:airplane/entities/authInfo.dart';
 import 'package:airplane/entities/plan.dart';
-import 'package:airplane/entities/premiumUser.dart';
 import 'package:airplane/find/find_top_premium_user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class AddNewPlan extends StatefulWidget {
-  final PremiumUser premInfo;
+  final UserDoc premInfo;
   const AddNewPlan(this.premInfo, {Key? key}) : super(key: key);
 
   @override
