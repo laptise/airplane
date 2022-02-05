@@ -24,6 +24,7 @@ class UserDoc {
   bool isPremium = false;
   DateTime createdAt;
   DateTime updatedAt;
+  String? profileImg;
 
   UserDoc.createNew(this.id, this.name, this.note)
       : lcName = name.toLowerCase(),
