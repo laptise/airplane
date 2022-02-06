@@ -1,4 +1,5 @@
 import 'package:airplane/entities/authInfo.dart';
+import 'package:airplane/http/test.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -17,13 +18,8 @@ class _SigninPageState extends State<SigninPage> {
   final _form = GlobalKey<FormState>();
 
   void submit() async {
-    var auth = FirebaseAuth.instance;
     try {
-      final credental = await auth.createUserWithEmailAndPassword(
-          email: _email, password: _password);
-      final uid = credental.user!.uid;
-      final newUser = UserDoc.createNew(uid, _name, "note");
-      await newUser.upsert();
+      await Req.registNewUser(_email, _password, _name, "hello");
       show();
     } catch (e) {
       print(e);
