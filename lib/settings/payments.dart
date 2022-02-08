@@ -13,45 +13,44 @@ class PaymentSetting extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     UserDoc user = ref.watch(userInfoProvider) as UserDoc;
-
     final cardController = CardEditController();
     return Scaffold(
         appBar: SlimAppBar("支払い手段の設定"),
         body: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "カード番号の登録",
-                style: TextPresets.bold14,
-              ),
-              CardField(
-                controller: cardController,
-                onCardChanged: (card) {
-                  print(card);
-                },
-              ),
-              Text(
-                "請求者情報",
-                style: TextPresets.bold14,
-              ),
-              TextFormField(decoration: const InputDecoration(labelText: "住所")),
-              TextButton(
-                  onPressed: () {
-                    Req.testReq();
-                    print(cardController.details);
-                  },
-                  child: FutureBuilder(
-                    future: Req.getStripeInfo(user),
-                    builder: (BuildContext context,
-                        AsyncSnapshot<dynamic> snapshot) {
-                      print(snapshot);
-                      return Text("Hello");
-                    },
-                  ))
-            ],
-          ),
-        ));
+            padding: const EdgeInsets.all(16.0),
+            child: FutureBuilder(
+              future: user.getStripeInfo(),
+              builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                if (snapshot.hasData) {
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "カード番号の登録",
+                        style: TextPresets.bold14,
+                      ),
+                      CardField(
+                        dangerouslyGetFullCardDetails: true,
+                        dangerouslyUpdateFullCardDetails: true,
+                        controller: cardController,
+                      ),
+                      Text(
+                        "請求者情報",
+                        style: TextPresets.bold14,
+                      ),
+                      TextFormField(
+                          decoration: const InputDecoration(labelText: "住所")),
+                      TextButton(
+                          onPressed: () {
+                            user.updateCard(cardController.details);
+                          },
+                          child: Text("update"))
+                    ],
+                  );
+                } else {
+                  return Text("wait");
+                }
+              },
+            )));
   }
 }

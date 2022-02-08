@@ -1,6 +1,11 @@
+import 'dart:convert';
+
+import 'package:airplane/http/test.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 
 import 'instance.dart';
+import 'package:http/http.dart' as http;
 
 class FromFS {
   static updatedAt(DocumentSnapshot<Map<String, dynamic>> snapshot) =>
@@ -89,6 +94,27 @@ class UserDoc {
   }
 
   Premiums? get premiums => isPremium ? Premiums(this) : null;
+
+  String get _aPaymentsToken {
+    final str = "$id:$paymentId";
+    Codec<String, String> stringToBase64 = utf8.fuse(base64);
+    return stringToBase64.encode(str);
+  }
+
+  Future<dynamic> getStripeInfo() async {
+    final res = await http.get(
+        Uri.parse(Req.targetUrl + 'api/v3/customer/info'),
+        headers: {"A-Payments": _aPaymentsToken});
+    final decoded = jsonDecode(res.body);
+    return decoded;
+  }
+
+  Future<void> updateCard(CardFieldInputDetails card) async {
+    final res = await http.post(
+        Uri.parse(Req.targetUrl + 'api/v3/customer/info'),
+        body: jsonEncode(card),
+        headers: {"A-Payments": _aPaymentsToken});
+  }
 }
 
 class Premiums {
