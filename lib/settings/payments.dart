@@ -30,8 +30,6 @@ class PaymentSetting extends HookConsumerWidget {
                         style: TextPresets.bold14,
                       ),
                       CardField(
-                        dangerouslyGetFullCardDetails: true,
-                        dangerouslyUpdateFullCardDetails: true,
                         controller: cardController,
                       ),
                       Text(

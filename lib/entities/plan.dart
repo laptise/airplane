@@ -65,6 +65,10 @@ class Plan {
     return Plan.colRef.where("owner", isEqualTo: uid).snapshots();
   }
 
+  static Stream<DocumentSnapshot<Plan>> getStreamFromId(String id) {
+    return Plan.colRef.doc(id).snapshots();
+  }
+
   Future<Plan> upsert() async {
     await Plan.colRef.doc(id).set(this);
     return this;

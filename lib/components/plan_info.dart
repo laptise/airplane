@@ -1,26 +1,24 @@
-import 'package:airplane/components/plan_info.dart';
 import 'package:airplane/entities/authInfo.dart';
 import 'package:airplane/entities/plan.dart';
 import 'package:airplane/find/find_top_premium_user.dart';
-import 'package:airplane/premiums/plans/plans.dart';
 import 'package:airplane/style.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class UserProfilePage extends StatelessWidget {
-  final String toViewUid;
-  const UserProfilePage(this.toViewUid, {Key? key}) : super(key: key);
+class PlanInfoPage extends StatelessWidget {
+  final Plan plan;
+  final UserDoc owner;
+  const PlanInfoPage(this.owner, this.plan, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         body: StreamBuilder(
-      stream: UserDoc.getStreamFromUid(toViewUid),
+      stream: Plan.getStreamFromId(plan.id!),
       builder: (BuildContext context,
-          AsyncSnapshot<DocumentSnapshot<UserDoc>> snapshot) {
+          AsyncSnapshot<DocumentSnapshot<Plan>> snapshot) {
         return snapshot.hasData
-            ? UserProfileBody(snapshot.data!.data()!)
+            ? UserProfileBody(owner, snapshot.data!.data()!)
             : const Text("js");
       },
     ));
@@ -28,14 +26,15 @@ class UserProfilePage extends StatelessWidget {
 }
 
 class UserProfileBody extends StatelessWidget {
-  final UserDoc user;
+  final Plan plan;
+  final UserDoc owner;
 
-  const UserProfileBody(this.user, {Key? key}) : super(key: key);
+  const UserProfileBody(this.owner, this.plan, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: SlimAppBar(user.name),
+        appBar: SlimAppBar(owner.name + "さんのプラン"),
         body: Padding(
           padding: const EdgeInsets.all(20.0),
           child: SizedBox(
@@ -50,10 +49,11 @@ class UserProfileBody extends StatelessWidget {
                 ),
                 const Padding(padding: EdgeInsets.only(bottom: 10.0)),
                 Text(
-                  user.name,
+                  plan.name,
                   style: TextPresets.bold16,
                 ),
-                UsersPlanList(user)
+                Text(plan.note)
+                // UsersPlanList(user.id)
               ],
             ),
           ),
@@ -62,8 +62,8 @@ class UserProfileBody extends StatelessWidget {
 }
 
 class UsersPlanList extends StatelessWidget {
-  final UserDoc premUser;
-  const UsersPlanList(this.premUser, {Key? key}) : super(key: key);
+  final String premiumUserId;
+  const UsersPlanList(this.premiumUserId, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -84,13 +84,13 @@ class UsersPlanList extends StatelessWidget {
             ),
           ),
           StreamBuilder(
-            stream: Plan.getListStreamFromOwnerUid(premUser.id),
+            stream: Plan.getListStreamFromOwnerUid(premiumUserId),
             builder: (BuildContext context,
                 AsyncSnapshot<QuerySnapshot<Plan>> snapshot) {
               return Column(
                 children: snapshot.hasData
                     ? snapshot.data!.docs
-                        .map((e) => SinglePlanPlate(premUser, e.data()))
+                        .map((e) => SinglePlanPlate(e.data()))
                         .toList()
                     : [],
               );
@@ -104,8 +104,8 @@ class UsersPlanList extends StatelessWidget {
 
 class SinglePlanPlate extends StatelessWidget {
   final Plan plan;
-  final UserDoc owner;
-  const SinglePlanPlate(this.owner, this.plan, {Key? key}) : super(key: key);
+
+  const SinglePlanPlate(this.plan, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -115,10 +115,6 @@ class SinglePlanPlate extends StatelessWidget {
         children: [
           ListTile(
             onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => PlanInfoPage(owner, plan)));
               print("object");
             },
             title: Text(plan.name),
